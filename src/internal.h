@@ -535,7 +535,6 @@ struct _GLFWwindow
     GLFWbool            resizable;
     GLFWbool            decorated;
     GLFWbool            visible;
-    GLFWbool            focused;
     GLFWbool            autoIconify;
     GLFWbool            floating;
     GLFWbool            focusOnShow;

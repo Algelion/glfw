@@ -954,14 +954,6 @@ GLFWAPI void glfwSetWindowAttrib(GLFWwindow* handle, int attrib, int value)
 
     switch (attrib)
     {
-        case GLFW_FOCUSED:
-            window->focused = value;
-            if (value)
-                _glfw.platform.focusWindow(window);
-            else
-                _glfw.platform.focusWindow(NULL);
-            return;
-        
         case GLFW_AUTO_ICONIFY:
             window->autoIconify = value;
             return;
