@@ -226,9 +226,12 @@ GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height,
     window->videoMode.refreshRate = _glfw.hints.refreshRate;
 
     window->monitor          = (_GLFWmonitor*) monitor;
+    window->focused          = wndconfig.focused;
     window->resizable        = wndconfig.resizable;
     window->decorated        = wndconfig.decorated;
     window->autoIconify      = wndconfig.autoIconify;
+    window->visible          = wndconfig.visible;
+    window->maximized        = wndconfig.maximized;
     window->floating         = wndconfig.floating;
     window->focusOnShow      = wndconfig.focusOnShow;
     window->mousePassthrough = wndconfig.mousePassthrough;
@@ -951,6 +954,14 @@ GLFWAPI void glfwSetWindowAttrib(GLFWwindow* handle, int attrib, int value)
 
     switch (attrib)
     {
+        case GLFW_FOCUSED:
+            window->focused = value;
+            if (value)
+                _glfw.platform.focusWindow(window);
+            else
+                _glfw.platform.focusWindow(NULL);
+            return;
+        
         case GLFW_AUTO_ICONIFY:
             window->autoIconify = value;
             return;
@@ -959,6 +970,14 @@ GLFWAPI void glfwSetWindowAttrib(GLFWwindow* handle, int attrib, int value)
             window->resizable = value;
             if (!window->monitor)
                 _glfw.platform.setWindowResizable(window, value);
+            return;
+            
+        case GLFW_VISIBLE:
+            window->visible = value;
+            if (!window->monitor && value)
+                _glfw.platform.showWindow(window);
+            else if (!window->monitor && !value)
+                _glfw.platform.hideWindow(window);
             return;
 
         case GLFW_DECORATED:
@@ -971,6 +990,14 @@ GLFWAPI void glfwSetWindowAttrib(GLFWwindow* handle, int attrib, int value)
             window->floating = value;
             if (!window->monitor)
                 _glfw.platform.setWindowFloating(window, value);
+            return;
+
+        case GLFW_MAXIMIZED:
+            window->maximized = value;
+            if(!window->monitor && window->resizable && value)
+                _glfw.platform.maximizeWindow(window);
+            else if(!window->monitor && window->resizable && !value)
+                _glfw.platform.restoreWindow(window);
             return;
 
         case GLFW_FOCUS_ON_SHOW:

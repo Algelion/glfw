@@ -534,9 +534,12 @@ struct _GLFWwindow
     // Window settings and state
     GLFWbool            resizable;
     GLFWbool            decorated;
+    GLFWbool            visible;
+    GLFWbool            focused;
     GLFWbool            autoIconify;
     GLFWbool            floating;
     GLFWbool            focusOnShow;
+    GLFWbool            maximized;
     GLFWbool            mousePassthrough;
     GLFWbool            shouldClose;
     void*               userPointer;
